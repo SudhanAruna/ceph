@@ -198,6 +198,7 @@ def before_feature(context, feature):
         print("Failed to complete bootstrap..")
         _handle_kcli_plan("delete")
         exit(1)
+    context.last_executed = {}
 
 
 def after_feature(context, feature):

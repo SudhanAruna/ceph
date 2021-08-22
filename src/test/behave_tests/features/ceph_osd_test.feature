@@ -11,7 +11,7 @@ Feature: Install a basic Ceph cluster
 
   Scenario: Create OSDs
     Given I log as root into ceph-node-00
-    When I execute
+    When I execute in cephadm_shell
         """
         ceph orch device ls
         """
@@ -21,13 +21,13 @@ Feature: Install a basic Ceph cluster
         ceph-node-01.cephlab.com  /dev/vdb  hdd  Unknown  N/A    N/A    Yes
         ceph-node-02.cephlab.com  /dev/vdb  hdd  Unknown  N/A    N/A    Yes
         """
-    Then I execute
+    Then I execute in cephadm_shell
         """
         ceph orch daemon add osd ceph-node-00.cephlab.com:/dev/vdb
         ceph orch daemon add osd ceph-node-01.cephlab.com:/dev/vdb
         ceph orch daemon add osd ceph-node-02.cephlab.com:/dev/vdb
         """
-    Then I execute
+    Then I execute in cephadm_shell
         """
         ceph orch device ls
         """
@@ -37,7 +37,7 @@ Feature: Install a basic Ceph cluster
         ceph-node-01.cephlab.com  /dev/vdb  hdd  Unknown  N/A    N/A    No
         ceph-node-02.cephlab.com  /dev/vdb  hdd  Unknown  N/A    N/A    No
         """
-    Then I execute
+    Then I execute in cephadm_shell
         """
         ceph -s
         """

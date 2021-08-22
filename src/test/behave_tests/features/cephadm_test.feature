@@ -9,12 +9,12 @@ Feature: Install a basic Ceph cluster
 
   Scenario: Execute commands in cluster nodes
     Given I log as root into ceph-node-00
-    And I execute
+    And I execute in host
         """
         curl --silent --remote-name --location https://raw.githubusercontent.com/ceph/ceph/octopus/src/cephadm/cephadm
         chmod +x cephadm
         """
-    When I execute
+    When I execute in host
         """
         cephadm version
         """

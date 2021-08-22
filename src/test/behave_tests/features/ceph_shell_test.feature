@@ -9,7 +9,7 @@ Feature: Install a basic Ceph cluster
 
   Scenario: Execute ceph command to check status
     Given I log as root into ceph-node-00
-    When I execute
+    When I execute in cephadm_shell
         """
         ceph orch status
         """
@@ -23,7 +23,7 @@ Feature: Install a basic Ceph cluster
 
   Scenario: Execute ceph command to check orch host list
     Given I log as root into ceph-node-00
-    When I execute
+    When I execute in cephadm_shell
         """
         ceph orch host ls
         """
@@ -36,7 +36,7 @@ Feature: Install a basic Ceph cluster
 
   Scenario: Execute ceph command to check orch device list
     Given I log as root into ceph-node-00
-    When I execute
+    When I execute in cephadm_shell
         """
         ceph orch device ls
         """
@@ -50,7 +50,7 @@ Feature: Install a basic Ceph cluster
 
   Scenario: Execute ceph command to check orch
     Given I log as root into ceph-node-00
-    When I execute
+    When I execute in cephadm_shell
         """
         ceph orch ls
         """

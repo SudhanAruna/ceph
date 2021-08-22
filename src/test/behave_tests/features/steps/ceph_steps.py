@@ -11,40 +11,47 @@ def login_to_node(context, node):
     context.node = node
 
 
-@given("I execute")
-def init_step_execute(context):
+@given("I execute in {shell}")
+def init_step_execute(context, shell):
     commands = context.text.split("\n")
     for command in commands:
-        op, code = execute_ssh_cmd(context.node, command)
+        op, code = execute_ssh_cmd(context.node, shell, command)
         if code:
             raise Exception("Failed to execute")
-        context.last_executed_cmd = command
+        # context.last_executed_cmd = command
+        context.last_executed["cmd"] = command
+        context.last_executed["shell"] = shell
 
 
-@when("I execute")
-@then("I execute")
-def execute_step(context):
+@when("I execute in {shell}")
+@then("I execute in {shell}")
+def execute_step(context, shell):
     if context.node is None:
         raise Exception("Failed not logged into virtual machine")
     for command in context.text.split("\n"):
-        output, return_code = execute_ssh_cmd(context.node, command)
-        context.last_executed_cmd = command
+        output, return_code = execute_ssh_cmd(context.node, shell, command)
+        # context.last_executed_cmd = command
+        context.last_executed["cmd"] = command
+        context.last_executed["shell"] = shell
         if return_code != 0:
             raise Exception(f"Failed to execute ssh\n Message:{output}")
         context.output = str_to_list(output)
     print(f"Executed output : {context.output}")
 
 
-@then("I execute only {command}")
-def execute_only_one_step(context, command):
+@then("I execute in {shell} only {command}")
+def execute_only_one_step(context, shell, command):
     """
     Run's single command and doesn't use multi-line
     :params command: given command to execute
     """
     if context.node is None:
         raise Exception("Failed not logged into virtual machine")
-    output, return_code = execute_ssh_cmd(context.node, command)
-    context.last_executed_cmd = command
+    output, return_code = execute_ssh_cmd(context.node, shell, command)
+    context.last_executed["cmd"] = command
+    context.last_executed["shell"] = shell
+    # context.last_executed_cmd = command
+    # context.last_executed_shell
     if return_code != 0:
         raise Exception(f"Failed to execute ssh\nMessage:{output}")
     context.output = str_to_list(output)
@@ -64,7 +71,7 @@ def execute_and_wait_until_step(context, time_out):
     while wait_time < time_out and not context.found_all_keywords:
         found_keys = []
         context.execute_steps(
-            f"then I execute only {context.last_executed_cmd}"
+            f"then I execute in {context.last_executed['shell']} only {context.last_executed['cmd']}"
         )
 
         executed_output = context.output

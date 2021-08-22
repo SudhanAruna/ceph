@@ -69,11 +69,11 @@ def execute_kcli_cmd(command):
     return (op, proc.returncode)
 
 
-def execute_ssh_cmd(vm_name, command):
+def execute_ssh_cmd(vm_name, shell, command):
     """
     Executes the provided ssh command on the provided vm machine
     """
-    if command.startswith("ceph "):
+    if shell == "cephadm_shell":
         command = f"cephadm shell {command}"
     sudo_cmd = f"sudo -i {command}".split(" ")
     sudo_cmd = " ".join([f'"{cmd}"' for cmd in sudo_cmd])
